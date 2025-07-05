@@ -1,2 +1,3 @@
-WordPress/*
-terraform/*
+.terraform*
+WordPress/wp*
+WordPress/xmlrpc.php
