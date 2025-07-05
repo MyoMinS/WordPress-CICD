@@ -7,13 +7,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Deploy files via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
-        with:
-          server: ftp.yourserver.com
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: wp-content/
-          server-dir: /public_html/wp-content/
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_PRIVATE_KEY }} >> ~/.ssh/known_hosts
+
+      - name: Deploy files via rsyn
+        run: |
+          rsync -avz --delete ./wp-content/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/WordPress
