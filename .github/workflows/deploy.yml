@@ -19,4 +19,4 @@ jobs:
 
       - name: Deploy files via rsyn
         run: |
-          rsync -avz --delete ./wp-content/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/WordPress
+          rsync -avz --delete ./wp-content/plugins/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/WordPress/wp-content/plugins/
